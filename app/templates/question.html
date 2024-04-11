@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>심리테스트</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #question {
+      margin-top: 50px;
+      font-size: 24px;
+    }
+
+    #buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      font-size: 18px;
+      margin: 50px 15px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="question"></div>
+  <div id="buttons">
+    <button id="yes">예</button>
+    <button id="no">아니오</button>
+  </div>
+  <div id="resultPage" style="display: none;">
+    <button onclick="sendResult()">결과 제출</button>
+  </div>
+
+  <script>
+    const questions = [
+      "예시1",
+      "예시2",
+      "예시3",
+      "예시4",
+      "예시5",
+    ];
+    const questionElement = document.getElementById("question");
+    const buttonsElement = document.getElementById("buttons");
+    const resultPageElement = document.getElementById("resultPage");
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+
+    function showQuestion() {
+      if (currentQuestionIndex < questions.length) {
+        questionElement.innerText = questions[currentQuestionIndex];
+        buttonsElement.style.display = "block";
+        resultPageElement.style.display = "none";
+      } else {
+        questionElement.innerText = "심리테스트가 종료되었습니다.";
+        buttonsElement.style.display = "none";
+        resultPageElement.style.display = "block";
+      }
+    }
+    showQuestion();
+
+    document.getElementById("yes").addEventListener("click", () => {
+      userAnswers[currentQuestionIndex] = "yes";
+      currentQuestionIndex++;
+      showQuestion();
+    });
+
+    document.getElementById("no").addEventListener("click", () => {
+      userAnswers[currentQuestionIndex] = "no";
+      currentQuestionIndex++;
+      showQuestion();
+    });
+
+    // 결과값을 서버로 전송하는 함수
+// 결과값을 서버로 전송하는 함수
+async function sendResult() {
+    const answers = questions.map((_, index) => ({
+        question_id: index + 1, // 실제 애플리케이션에서는 질문 ID를 올바르게 지정해야 합니다.
+        chosen_answer: userAnswers[index]
+    }));
+    try {
+        const response = await fetch("/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ answers }) // 수정: answers 객체를 직접 전송
+        });
+        if (!response.ok) throw new Error("서버 응답 실패");
+        console.log("결과 전송 완료");
+        window.location.href = "/results";
+    } catch (error) {
+        console.error("오류 발생:", error);
+    }
+}
+  </script>
+</body>
+
+</html>

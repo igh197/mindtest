@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>결과 보기</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="participants_graph"></div>
+    <script>
+    var graphJSON_participants = {{ graphJSON_participants | safe }};
+    Plotly.newPlot('participants_graph', graphJSON_participants.data, graphJSON_participants.layout);
+</script>
+    
+    {% for question_id, graphJSON in graphsJSON_answers.items() %}
+        <div id="question_{{ question_id }}"></div>
+        <script>
+            var graphJSON = {{ graphJSON | safe }};
+            Plotly.newPlot('question_{{ question_id }}',graphJSON.data, graphJSON.layout);
+        </script>
+    {% endfor %}
+</body>
+</html>
