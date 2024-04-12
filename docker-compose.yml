@@ -30,9 +30,9 @@ services:
       ports:
         - 80:3306
       environment:
-        - MYSQL_DB=${DB_NAME}
-        - MYSQL_USER=${DB_USER}
-        - MYSQL_PASSWORD=${DB_PASS}
+        - MYSQL_DB=mindtest
+        - MYSQL_USER=ighan65
+        - MYSQL_PASSWORD=password123
         # 명렬어 설정
       command:
           - --character-set-server=utf8mb4
